@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { TextField, Button, Box, Typography, Container } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const Register = () => {
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Required'),
@@ -36,6 +37,8 @@ const Register = () => {
       try {
         const { confirmPassword, ...userData } = values
         const response = await axios.post('http://localhost:5000/api/auth/register', userData)
+      
+      
         setSuccess('Registration successful! Please login.')
         setError('')
         formik.resetForm()

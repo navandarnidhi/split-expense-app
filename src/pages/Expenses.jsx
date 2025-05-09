@@ -86,7 +86,7 @@ const Expenses = () => {
 
   const handleDelete = async (id) => {
     try {
-      const token = localStorage.getItem('token')
+      const token = sessionStorage.getItem('token')
       await axios.delete(`http://localhost:5000/api/expenses/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
@@ -148,7 +148,7 @@ const Expenses = () => {
               {expenses.map((expense) => (
                 <TableRow key={expense._id}>
                   <TableCell>{expense.description}</TableCell>
-                  <TableCell>${expense.amount.toFixed(2)}</TableCell>
+                  <TableCell>${expense.amount}</TableCell>
                   <TableCell>{expense.category}</TableCell>
                   <TableCell>{new Date(expense.date).toLocaleDateString()}</TableCell>
                   <TableCell>

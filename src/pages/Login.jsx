@@ -22,7 +22,8 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await axios.post('http://localhost:5000/api/auth/login', values)
-        localStorage.setItem('token', response.data.token)
+          sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('user', JSON.stringify(response.data.user));
         window.location.href = '/expenses'
       } catch (err) {
         setError(err.response?.data?.message || 'Login failed')

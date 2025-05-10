@@ -4,10 +4,12 @@ import * as Yup from 'yup'
 import { TextField, Button, Box, Typography, Container } from '@mui/material'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { useAuth } from '../hooks/useAuth'
 
 const Login = () => {
-  const [error, setError] = useState('')
+  const [error, setError] = useState('');
 
+  const { login } = useAuth(); // Assuming you have a login function in your auth context
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email address').required('Required'),
     password: Yup.string().required('Required'),
@@ -21,9 +23,8 @@ const Login = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('http://localhost:5000/api/auth/login', values)
-          sessionStorage.setItem('token', response.data.token);
-        sessionStorage.setItem('user', JSON.stringify(response.data.user));
+        const response = await axios.post('http://localhost:5000/api/auth/login', values)        
+        login(response.data.token, JSON.stringify(response.data.user));
         window.location.href = '/expenses'
       } catch (err) {
         setError(err.response?.data?.message || 'Login failed')
@@ -79,7 +80,7 @@ const Login = () => {
         <Typography sx={{ mt: 2 }}>
           Don't have an account? <Link to="/register">Register here</Link>
         </Typography>
-      </Box>
+      </Box> 
     </Container>
   )
 }

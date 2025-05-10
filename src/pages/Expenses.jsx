@@ -108,6 +108,14 @@ const Expenses = () => {
     formik.resetForm()
   }
 
+  const handleSplit = async (id) => {
+    try { 
+     
+    }catch (err) {
+      setError(err.response?.data?.message || 'Error splitting expense')
+    }
+  }
+  
   useEffect(() => {
     fetchExpenses()
   }, [])
@@ -154,6 +162,9 @@ const Expenses = () => {
                   <TableCell>
                     <IconButton onClick={() => handleEdit(expense)}>
                       <Edit color="primary" />
+                    </IconButton>
+                    <IconButton onClick={() => handleSplit(expense._id)}>
+                        SPLIT
                     </IconButton>
                     <IconButton onClick={() => handleDelete(expense._id)}>
                       <Delete color="error" />

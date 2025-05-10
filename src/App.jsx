@@ -9,10 +9,11 @@ import Contact from './pages/Contact'
 import Expenses from './pages/Expenses'
 import Settlements from './pages/Settlements'
 import './App.css'
-
+import { AuthProvider } from './context/AuthContext'
 function App() {
   return (
     <div className="app">
+      <AuthProvider>
       <Navbar />
       <main className="main-content">
         <Routes>
@@ -25,6 +26,7 @@ function App() {
           <Route path="/settlements" element={<Settlements />} />
         </Routes>
       </main>
+      </AuthProvider>
       <Footer />
     </div>
   )

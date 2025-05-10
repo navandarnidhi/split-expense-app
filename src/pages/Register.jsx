@@ -35,10 +35,8 @@ const Register = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const { confirmPassword, ...userData } = values
-        const response = await axios.post('http://localhost:5000/api/auth/register', userData)
-      
-      
+        const { confirmPassword, ...userData } = values;
+        const response = await axios.post('http://localhost:5000/api/auth/register', userData);
         setSuccess('Registration successful! Please login.')
         setError('')
         formik.resetForm()

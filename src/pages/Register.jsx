@@ -29,7 +29,6 @@ const Register = () => {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Required'),
-    role: Yup.string().required('Required'),
   })
 
   const formik = useFormik({
@@ -38,15 +37,13 @@ const Register = () => {
       email: '',
       password: '',
       confirmPassword: '',
-      role: 'user', // Default role
     },
     validationSchema,
     onSubmit: async (values) => {
 
-      console.log(values);
       try {
         const { confirmPassword, ...userData } = values;
-        // const response = await axios.post('http://localhost:5000/api/auth/register', userData);
+        const response = await axios.post('http://localhost:5000/api/auth/register', userData);
         setSuccess('Registration successful! Please login.')
         setError('')
         formik.resetForm()

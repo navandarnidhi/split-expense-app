@@ -14,6 +14,8 @@ const teamMembers = [
     role: "Frontend Developer",
     bio: "Specializes in React and UI/UX design",
     email: "mohini.patil@splitwise.com",
+    profileImage: "/mohini.jpg",
+
   },
   {
     name: "Nidhi Navandar",
@@ -27,6 +29,7 @@ const teamMembers = [
     role: "Full Stack Developer",
     bio: "Works on both frontend and backend integration",
     email: "owais.shaikh@splitwise.com",
+    profileImage: '/owais.jpg'
   },
 ];
 

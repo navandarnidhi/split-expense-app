@@ -1,17 +1,22 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
+import UserMenu from '../components/UserMenu';
 
 
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth() // Get authentication status from your auth context
-
+const navigate = useNavigate();
   const handleLogout = () => {
     // Perform logout logic here, e.g., clear token, redirect to login page
    logout();
 
-    window.location.href = '/login';
+    navigate('/login');
   }
+  const user = {
+  name: "Mohini Patil",
+  imageUrl: "https://via.placeholder.com/40", // replace with your user image URL
+};
   return (
     <AppBar position="static">
       <Toolbar>
@@ -24,7 +29,8 @@ const Navbar = () => {
           <>
             <Button color="inherit" component={Link} to="/expenses">Expenses</Button>
             <Button color="inherit" component={Link} to="/settlement">Settlement</Button>
-            <Button color="inherit" onClick={handleLogout}>Logout</Button>
+            <UserMenu user={user} />
+            {/* <Button color="inherit" onClick={handleLogout}>Logout</Button> */}
           </>
         ) : (
           <>

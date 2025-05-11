@@ -9,7 +9,7 @@ import {
   Container,
   InputAdornment,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -18,7 +18,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 const Login = () => {
   const [error, setError] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
+  const navigate = useNavigate();
   const { login } = useAuth(); // Assuming you have a login function in your auth context
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
@@ -38,7 +38,7 @@ const Login = () => {
           values
         );
         login(response.data.token, JSON.stringify(response.data.user));
-        window.location.href = "/expenses";
+        navigate('/group');
       } catch (err) {
         setError(err.response?.data?.message || "Login failed");
       }

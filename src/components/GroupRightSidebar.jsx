@@ -34,10 +34,17 @@ const GroupRightSidebar = ({ handleOnOpenDialog }) => {
     const fetchGroups = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5000/api/groups", {
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        console.log("user", user, tokenl̥);l̥
+
+        const response = await axios.get("http://localhost:5000/api/expensegroup", {
+          user_id: user,
+        },
+          {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // setGroups(response.data);
+        setGroups(response.data);
       } catch (error) {
         console.error("Error fetching groups:", error);
       }

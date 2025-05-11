@@ -1,13 +1,20 @@
 import { useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { TextField, Button, Box, Typography, Container } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { TextField, Button, Box, Typography, Container, Switch, FormControlLabel, InputAdornment } from '@mui/material'
+import { Link, useNavigate } from 'react-router-dom';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
+
 import axios from 'axios'
 
 const Register = () => {
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const [success, setSuccess] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Required'),
@@ -33,9 +40,10 @@ const Register = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
+
       try {
-        const { confirmPassword, ...userData } = values
-        const response = await axios.post('http://localhost:5000/api/auth/register', userData)
+        const { confirmPassword, ...userData } = values;
+        const response = await axios.post('http://localhost:5000/api/auth/register', userData);
         setSuccess('Registration successful! Please login.')
         setError('')
         formik.resetForm()
@@ -45,6 +53,7 @@ const Register = () => {
       }
     },
   })
+
 
   return (
     <Container maxWidth="sm">
@@ -90,25 +99,60 @@ const Register = () => {
             id="password"
             name="password"
             label="Password"
-            type="password"
+            type={isPasswordVisible ? "text" : "password"}
             margin="normal"
             value={formik.values.password}
             onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                  >
+                    {!isPasswordVisible ? (
+                      <VisibilityOffIcon />
+                    ) : (
+                      <VisibilityIcon />
+                    )}
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
           <TextField
             fullWidth
             id="confirmPassword"
             name="confirmPassword"
             label="Confirm Password"
-            type="password"
+            type={isConfirmPasswordVisible ? "text" : "password"}
             margin="normal"
             value={formik.values.confirmPassword}
             onChange={formik.handleChange}
             error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
             helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+                  >
+                    {!isConfirmPasswordVisible ? (
+                      <VisibilityOffIcon />
+                    ) : (
+                      <VisibilityIcon />
+                    )}
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
+        
           <Button 
             color="primary" 
             variant="contained" 

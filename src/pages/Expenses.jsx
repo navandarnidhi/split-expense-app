@@ -86,7 +86,7 @@ const Expenses = () => {
 
   const handleDelete = async (id) => {
     try {
-      const token = localStorage.getItem('token')
+      const token = sessionStorage.getItem('token')
       await axios.delete(`http://localhost:5000/api/expenses/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
@@ -108,6 +108,14 @@ const Expenses = () => {
     formik.resetForm()
   }
 
+  const handleSplit = async (id) => {
+    try { 
+     
+    }catch (err) {
+      setError(err.response?.data?.message || 'Error splitting expense')
+    }
+  }
+  
   useEffect(() => {
     fetchExpenses()
   }, [])
@@ -148,12 +156,15 @@ const Expenses = () => {
               {expenses.map((expense) => (
                 <TableRow key={expense._id}>
                   <TableCell>{expense.description}</TableCell>
-                  <TableCell>${expense.amount.toFixed(2)}</TableCell>
+                  <TableCell>${expense.amount}</TableCell>
                   <TableCell>{expense.category}</TableCell>
                   <TableCell>{new Date(expense.date).toLocaleDateString()}</TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleEdit(expense)}>
                       <Edit color="primary" />
+                    </IconButton>
+                    <IconButton onClick={() => handleSplit(expense._id)}>
+                        SPLIT
                     </IconButton>
                     <IconButton onClick={() => handleDelete(expense._id)}>
                       <Delete color="error" />

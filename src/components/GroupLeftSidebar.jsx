@@ -1,6 +1,16 @@
-import { Avatar, Box, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Grid,
+  Paper,
+  Avatar,
+  Divider,
+  Stack,
+  LinearProgress,
+} from "@mui/material";
 
-export const GroupLeftSidebar = ({ members }) => {
+export const GroupLeftSidebar = ({members}) => {
   return (
     <Box sx={{ width: "20%", p: 2, backgroundColor: "#ffffff" }}>
       <Typography variant="subtitle1" gutterBottom>

@@ -6,17 +6,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  TextField,
   Button,
-  Divider,
   IconButton,
   ListItemButton,
 } from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import ListIcon from "@mui/icons-material/List";
 import GroupIcon from "@mui/icons-material/Group";
 import AddIcon from "@mui/icons-material/Add";
-import axios from "axios";
 
 const GroupItem = ({ groupName,groupId,onGroupName }) => {
   return (

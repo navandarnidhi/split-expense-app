@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
+import { useState, useEffect } from 'react';
 import { 
   TextField, 
   Button, 
@@ -19,106 +17,80 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions
-} from '@mui/material'
-import { Edit, Delete } from '@mui/icons-material'
-import axios from 'axios'
+} from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
+import axios from 'axios';
 
 const Expenses = () => {
-  const [expenses, setExpenses] = useState([])
-  const [open, setOpen] = useState(false)
-  const [editingId, setEditingId] = useState(null)
-  const [error, setError] = useState('')
-
-  const validationSchema = Yup.object({
-    description: Yup.string().required('Required'),
-    amount: Yup.number().required('Required').positive('Amount must be positive'),
-    category: Yup.string().required('Required'),
-  })
-
-  const formik = useFormik({
-    initialValues: {
-      description: '',
-      amount: '',
-      category: '',
-    },
-    validationSchema,
-    onSubmit: async (values) => {
-      try {
-        const token = localStorage.getItem('token')
-        if (editingId) {
-          await axios.put(`http://localhost:5000/api/expenses/${editingId}`, values, {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-        } else {
-          await axios.post('http://localhost:5000/api/expenses', values, {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-        }
-        fetchExpenses()
-        handleClose()
-      } catch (err) {
-        setError(err.response?.data?.message || 'Error saving expense')
-      }
-    },
-  })
+  const [expenses, setExpenses] = useState([]);
+  const [splitDialogOpen, setSplitDialogOpen] = useState(false);
+  const [splitExpenseId, setSplitExpenseId] = useState(null);
+  const [name, setName] = useState('');
+  const [total, setTotal] = useState('');
+  const [count, setCount] = useState('');
+  const [split, setSplit] = useState(null);
+  const [error, setError] = useState('');
 
   const fetchExpenses = async () => {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('token');
       const response = await axios.get('http://localhost:5000/api/expenses', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      setExpenses(response.data)
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setExpenses(response.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Error fetching expenses')
+      setError(err.response?.data?.message || 'Error fetching expenses');
     }
-  }
+  };
 
-  const handleEdit = (expense) => {
-    formik.setValues({
-      description: expense.description,
-      amount: expense.amount,
-      category: expense.category,
-    })
-    setEditingId(expense._id)
-    setOpen(true)
-  }
+  const handleSplitOpen = (id, amount) => {
+    setSplitExpenseId(id);
+    setTotal(amount);
+    setSplitDialogOpen(true);
+  };
 
-  const handleDelete = async (id) => {
+  const handleSplitClose = () => {
+    setSplitDialogOpen(false);
+    setName('');
+    setTotal('');
+    setCount('');
+    setSplit(null);
+  };
+
+  const handleSplitCalculation = () => {
+    const amt = parseFloat(total);
+    const ppl = parseInt(count);
+    if (!isNaN(amt) && !isNaN(ppl) && ppl > 0) {
+      setSplit((amt / ppl).toFixed(2));
+    }
+  };
+
+  const handleSplitSubmit = async () => {
     try {
-      const token = sessionStorage.getItem('token')
-      await axios.delete(`http://localhost:5000/api/expenses/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      fetchExpenses()
+      const token = localStorage.getItem('token');
+      const participants = Array.from({ length: parseInt(count) }, (_, i) => `Person ${i + 1}`);
+      await axios.post(
+        'http://localhost:5000/api/split_expense',
+        {
+          expenseId: splitExpenseId,
+          totalAmount: total,
+          participants,
+          splitAmount: split,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      fetchExpenses();
+      handleSplitClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Error deleting expense')
+      setError(err.response?.data?.message || 'Error saving split expense');
     }
-  }
+  };
 
-  const handleOpen = () => {
-    setOpen(true)
-    setEditingId(null)
-    formik.resetForm()
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-    setEditingId(null)
-    formik.resetForm()
-  }
-
-  const handleSplit = async (id) => {
-    try { 
-     
-    }catch (err) {
-      setError(err.response?.data?.message || 'Error splitting expense')
-    }
-  }
-  
   useEffect(() => {
-    fetchExpenses()
-  }, [])
+    fetchExpenses();
+  }, []);
 
   return (
     <Container maxWidth="lg">
@@ -126,21 +98,13 @@ const Expenses = () => {
         <Typography variant="h4" gutterBottom>
           My Expenses
         </Typography>
-        
+
         {error && (
           <Typography color="error" gutterBottom>
             {error}
           </Typography>
         )}
-        
-        <Button 
-          variant="contained" 
-          onClick={handleOpen}
-          sx={{ mb: 3 }}
-        >
-          Add New Expense
-        </Button>
-        
+
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -160,13 +124,13 @@ const Expenses = () => {
                   <TableCell>{expense.category}</TableCell>
                   <TableCell>{new Date(expense.date).toLocaleDateString()}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleEdit(expense)}>
+                    <IconButton onClick={() => handleSplitOpen(expense._id, expense.amount)}>
+                      SPLIT
+                    </IconButton>
+                    <IconButton onClick={() => console.log('Edit')}>
                       <Edit color="primary" />
                     </IconButton>
-                    <IconButton onClick={() => handleSplit(expense._id)}>
-                        SPLIT
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(expense._id)}>
+                    <IconButton onClick={() => console.log('Delete')}>
                       <Delete color="error" />
                     </IconButton>
                   </TableCell>
@@ -175,57 +139,63 @@ const Expenses = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>{editingId ? 'Edit Expense' : 'Add New Expense'}</DialogTitle>
+
+        <Dialog open={splitDialogOpen} onClose={handleSplitClose}>
+          <DialogTitle>Split Expense</DialogTitle>
           <DialogContent>
-            <form onSubmit={formik.handleSubmit}>
+            <div className="glass-card text-center">
+              <h4>Hello, {name || 'User'} 👋</h4>
               <TextField
                 fullWidth
-                id="description"
-                name="description"
-                label="Description"
+                className="form-control my-2"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 margin="normal"
-                value={formik.values.description}
-                onChange={formik.handleChange}
-                error={formik.touched.description && Boolean(formik.errors.description)}
-                helperText={formik.touched.description && formik.errors.description}
               />
               <TextField
                 fullWidth
-                id="amount"
-                name="amount"
-                label="Amount"
+                className="form-control my-2"
                 type="number"
+                placeholder="Total expense ($)"
+                value={total}
+                onChange={(e) => setTotal(e.target.value)}
                 margin="normal"
-                value={formik.values.amount}
-                onChange={formik.handleChange}
-                error={formik.touched.amount && Boolean(formik.errors.amount)}
-                helperText={formik.touched.amount && formik.errors.amount}
               />
               <TextField
                 fullWidth
-                id="category"
-                name="category"
-                label="Category"
+                className="form-control my-2"
+                type="number"
+                placeholder="Number of people"
+                value={count}
+                onChange={(e) => setCount(e.target.value)}
                 margin="normal"
-                value={formik.values.category}
-                onChange={formik.handleChange}
-                error={formik.touched.category && Boolean(formik.errors.category)}
-                helperText={formik.touched.category && formik.errors.category}
               />
-            </form>
+              <Button
+                fullWidth
+                className="btn btn-success w-100"
+                onClick={handleSplitCalculation}
+                sx={{ mt: 2 }}
+              >
+                Split Now
+              </Button>
+              {split && (
+                <Typography className="alert alert-info mt-3">
+                  Each person pays: <strong>${split}</strong>
+                </Typography>
+              )}
+            </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={formik.handleSubmit} color="primary">
-              {editingId ? 'Update' : 'Save'}
+            <Button onClick={handleSplitClose}>Cancel</Button>
+            <Button onClick={handleSplitSubmit} color="primary">
+              Submit
             </Button>
           </DialogActions>
         </Dialog>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
-export default Expenses
+export default Expenses;

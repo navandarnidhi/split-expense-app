@@ -36,7 +36,7 @@ const GroupRightSidebar = ({ handleOnOpenDialog }) => {
         const token = localStorage.getItem("token");
         const user = JSON.parse(localStorage.getItem("user"));
 
-        console.log("user", user, tokenl̥);l̥
+        console.log("user", user, tokenl̥);
 
         const response = await axios.get("http://localhost:5000/api/expensegroup", {
           user_id: user,

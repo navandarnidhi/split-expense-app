@@ -9,34 +9,35 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
-import { data } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 export const CreateGroupDialog = ({ open, onClose }) => {
   const [groupName, setGroupName] = useState("");
-  const [userId, setUserId] = useState(1);
+  const userId = JSON.parse(localStorage.getItem("user")).id;
+
   const [members, setMembers] = useState([]);
   const [error, setError] = useState("");
-  const handleCreateGroup = async () => { 
+  const handleCreateGroup = async () => {
     if (!groupName || members.length === 0) {
       setError("Please provide a group name and at least one member.");
       return;
     }
-        
 
-        const token = localStorage.getItem('token')
-       const res = await axios.post(`http://localhost:5000/api/expensegroup`, {
-            groupName: groupName,
-            members: members,
-            userId: userId
-        },
-        {
-              headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+    const token = localStorage.getItem("token");
+    const res = await axios.post(
+      `http://localhost:5000/api/expensegroup`,
+      {
+        groupName: groupName,
+        members: members,
+        userId: userId,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
-        onClose();
-    };
- 
+    onClose();
+  };
 
   return (
     <Dialog open={open} onClose={onClose}>

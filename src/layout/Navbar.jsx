@@ -10,7 +10,6 @@ const navigate = useNavigate();
   const handleLogout = () => {
     // Perform logout logic here, e.g., clear token, redirect to login page
    logout();
-
     navigate('/login');
   }
   const user = {
@@ -29,7 +28,7 @@ const navigate = useNavigate();
           <>
             <Button color="inherit" component={Link} to="/expenses">Expenses</Button>
             <Button color="inherit" component={Link} to="/settlement">Settlement</Button>
-            <UserMenu user={user} />
+            <UserMenu />
             {/* <Button color="inherit" onClick={handleLogout}>Logout</Button> */}
           </>
         ) : (

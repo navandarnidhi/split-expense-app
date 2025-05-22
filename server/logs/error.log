@@ -1,0 +1,13 @@
+2024-04-01T10:45:46.979Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T10:46:54.408Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T10:46:58.459Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T11:01:28.840Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T13:41:34.316Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T13:45:25.534Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T13:45:35.897Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T13:46:12.425Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T13:46:42.142Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T15:31:55.957Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T15:32:04.811Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T15:32:42.864Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
+2024-04-01T15:34:05.443Z | ERROR  | URL : /api/expense/v1/user | staus : 400 | message: No expense present for the user
